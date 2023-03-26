@@ -11,8 +11,8 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
     override init() {
         super.init()
         scrollDirection = .horizontal
-        minimumLineSpacing = 20
-        minimumInteritemSpacing = 20
+        minimumLineSpacing = 10
+        minimumInteritemSpacing = 10
     }
     
     required init?(coder: NSCoder) {
@@ -85,7 +85,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let leftInset = collectionView.layoutMargins.left
+        let leftInset = view.layoutMargins.left
         return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0)
     }
     
@@ -93,11 +93,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let cellWidthIncludingSpacing = itemSize.width + layout.minimumLineSpacing
         let offset = targetContentOffset.pointee.x
-        print(offset)
-        print(cellWidthIncludingSpacing)
         let index = round(offset / cellWidthIncludingSpacing)
         print(index)
         
-        targetContentOffset.pointee.x = index * cellWidthIncludingSpacing - scrollView.contentInset.left
+        targetContentOffset.pointee.x = index * cellWidthIncludingSpacing - scrollView.layoutMargins.left
     }
 }
