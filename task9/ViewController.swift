@@ -44,12 +44,12 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     
     private var collectionView: UICollectionView!
     
+    var lastIndex: CGFloat = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.title="Collection"
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         let customFlowLayout = CustomFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: customFlowLayout)
         collectionView.dataSource = self
@@ -63,15 +63,13 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            //          collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 50),
-            //         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -50)
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 100),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: -100)
         ])
         
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return 30
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -93,9 +91,14 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         let cellWidthIncludingSpacing = itemSize.width + layout.minimumLineSpacing
         let offset = targetContentOffset.pointee.x
-        let index = round(offset / cellWidthIncludingSpacing)
+        var index = round(offset / cellWidthIncludingSpacing)
+        if(index > (lastIndex+3)){
+            index = lastIndex + 3
+        }else if(index < (lastIndex-3)){
+            index = lastIndex - 3
+        }
+        lastIndex = index
         print(index)
-        
-        targetContentOffset.pointee.x = index * cellWidthIncludingSpacing - scrollView.layoutMargins.left
+        targetContentOffset.pointee.x = index * cellWidthIncludingSpacing // - collectionView.layoutMargins.left
     }
 }
